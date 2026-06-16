@@ -1,6 +1,6 @@
 import React from "react";
 import { Nav } from "react-bootstrap";
-import { MdDashboard, MdInventory, MdCategory, MdPeople } from "react-icons/md";
+import { MdInventory, MdCategory, MdPeople } from "react-icons/md";
 import "../styles/sidebar-styles.css";
 
 const NavBar = () => {

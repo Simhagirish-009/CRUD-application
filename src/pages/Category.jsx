@@ -4,7 +4,6 @@ import {
   Table,
   Modal,
   Form,
-  Card,
   Spinner,
   Alert,
 } from "react-bootstrap";

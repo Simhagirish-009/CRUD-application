@@ -9,16 +9,15 @@ import {toast , ToastContainer } from "react-toastify"; // Import Toastify
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading,setLoading] = useState(false);
-  const [error,setError] = useState("");
+  // const [loading,setLoading] = useState(false);
+  // const [error,setError] = useState("");
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle login logic here
-    setError("");
-    setLoading(true);
+    // setLoading(true);
     try {
       const data = { email, password };
       const response = await login(data);
@@ -27,18 +26,16 @@ const Login = () => {
       localStorage.setItem("access_token", response.data.access);
       localStorage.setItem("refresh_token", response.data.refresh);
       toast.success(response.data.message || "Login successful! Please verify OTP."); // Show success toast
-      setLoading(false);
+      // setLoading(false);
 
       setTimeout(() => {
         navigate("/Addproduct"); 
       }, 2000); 
 
     } catch (err) {
-      setLoading(false);
-      setError(
-        err.response?.data?.message ||
-          "An error occurred during login. Please try again."
-      );
+      // setLoading(false);
+      
+      alert(err.response?.data?.message || "An error occurred during login. Please try again.");
     }
     console.log("Logging in with:", { email, password });
   };

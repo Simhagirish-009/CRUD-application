@@ -12,7 +12,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -24,7 +24,6 @@ const Register = () => {
       setError("Passwords do not match!");
       return;
     }
-    setLoading(true);
 
     try {
       const data = { email, username, password };
@@ -32,7 +31,6 @@ const Register = () => {
       setSuccess(
         response.data.message || "Registration successful! Please login.",
       );
-      setLoading(false);
       setEmail("");
       setUsername("");
       setPassword("");
@@ -44,7 +42,6 @@ const Register = () => {
         navigate("/login");
       }, 2000);
     } catch (err) {
-      setLoading(false);
       setError(
         err.response?.data?.message ||
           "An error occurred during registration. Please try again.",
