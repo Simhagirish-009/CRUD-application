@@ -1,0 +1,65 @@
+/* Base styling for large screens */
+.sidebar-container {
+    width: 260px;
+    min-width: 260px;
+    background-color: #1e293b;
+    color: #f8fafc;
+    border-right: 1px solid #334155;
+    transition: all 0.3s ease-in-out;
+}
+
+.sidebar-brand {
+    padding: 24px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #334155;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #38bdf8;
+    white-space: nowrap;
+}
+
+.sidebar-link.nav-link {
+    color: #94a3b8 !important;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.sidebar-link.nav-link:hover {
+    background-color: #334155;
+    color: #ffffff !important;
+}
+
+.sidebar-link.nav-link.active {
+    background-color: #0284c7;
+    color: #ffffff !important;
+}
+
+.icon-align {
+    font-size: 1.35rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN: Rules applied for Mobile and Tablets (under 768px wide)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .sidebar-container {
+        width: 70px;      /* Collapses the width significantly */
+        min-width: 70px;
+    }
+
+    /* Centers the navigation link icons perfectly when text is hidden */
+    .sidebar-link.nav-link {
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+    /* Removes the default right margin from the icon since text is gone */
+    .sidebar-link .icon-align {
+        margin-right: 0 !important;
+    }
+}

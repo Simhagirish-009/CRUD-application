@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import "bootstrap/dist/css/bootstrap.min.css"; // If we use React Bootstrap only
+import "react-toastify/dist/ReactToastify.css";
+import "animate.css";
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
