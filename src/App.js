@@ -7,7 +7,6 @@ import NavBar from "./componenets/NavBar";
 import ProtectedRoute from "./config/ProtectedRoute";
 import ProtectedLayout from "./config/ProtectedLayout";
 import AddProduct from "./pages/AddProduct";
-import OtpVerify from "./pages/OtpVerify";
 import Category from "./pages/Category";
 import ViewProduct from "./pages/ViewProduct";
 
@@ -18,7 +17,6 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/nav" element={<NavBar />} />
-        <Route path="/verify-otp" element={<OtpVerify />} />
         <Route element={<ProtectedRoute />}>
           <Route element={<ProtectedLayout />}>
           
