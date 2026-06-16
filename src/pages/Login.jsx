@@ -3,7 +3,7 @@ import { Form, Button, Card } from "react-bootstrap";
 import "../styles/form-styles.css";
 import {login} from "../services/user_api";
 import { useNavigate } from "react-router-dom";
-import {toast , ToastContainer } from "react-toastify"; // Import Toastify
+import {toast  } from "react-toastify"; // Import Toastify
 
 
 const Login = () => {

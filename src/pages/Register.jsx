@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../styles/form-styles.css";
-import { toast, ToastContainer } from "react-toastify"; // Import Toastify
+import { toast } from "react-toastify"; // Import Toastify
 import { register } from "../services/user_api";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +13,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   // const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState("");
+  // const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,9 +28,7 @@ const Register = () => {
     try {
       const data = { email, username, password };
       const response = await register(data);
-      setSuccess(
-        response.data.message || "Registration successful! Please login.",
-      );
+      alert(response.data.message || "Registration successful! Please login.");
       setEmail("");
       setUsername("");
       setPassword("");
