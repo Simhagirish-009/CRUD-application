@@ -28,7 +28,10 @@ SECRET_KEY = 'django-insecure-)8*h)7)hq38yuq#7sjj95u^g^zbh-)f+44d3pu9bolc#+=l5rp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'https://crudaplly.netlify.app/',
+    'http://localhost:3000',
+]
 
 AUTH_USER_MODEL = 'myapp.CustomUser'
 
