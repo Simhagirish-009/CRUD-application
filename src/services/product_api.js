@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = "https://crud-application-rxyd.onrender.com/api";
 
 const getAuthConfig = () => {
   const token = localStorage.getItem("access_token");

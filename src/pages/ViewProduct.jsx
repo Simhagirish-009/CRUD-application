@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Table,
   Button,
@@ -7,15 +7,26 @@ import {
   Alert,
   Container,
   Spinner,
+  Row,
+  Col,
 } from "react-bootstrap";
-import { getProducts, updateProduct, deleteProduct, getCategories } from "../services/product_api"; // Adjust paths
+import * as XLSX from "xlsx"; // Import SheetJS
+import {
+  getProducts,
+  updateProduct,
+  deleteProduct,
+  getCategories,
+} from "../services/product_api"; // Adjust paths
 
 const ViewProduct = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false); // New loader state for Excel parsing
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const fileInputRef = useRef(null); // Reference to clear file input after processing
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editFormData, setEditFormData] = useState({
@@ -47,6 +58,89 @@ const ViewProduct = () => {
     loadData();
   }, []);
 
+  // --- Excel Import Logic ---
+  const handleExcelImport = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError("");
+    setSuccess("");
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const data = evt.target.result;
+        const workbook = XLSX.read(data, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        // Convert sheet data to an array of JSON objects
+        const rawJsonData = XLSX.utils.sheet_to_json(sheet);
+
+        if (rawJsonData.length === 0) {
+          throw new Error("The uploaded Excel sheet is empty.");
+        }
+
+        // Map and validate row properties expected by your backend database layout
+        // Expected columns in Excel: Name, Category, Quantity, Description
+        const formattedProducts = rawJsonData.map((row, index) => {
+          const name = row["Name"] || row["name"];
+          const categoryName = row["Category"] || row["category"];
+          const quantity = parseInt(row["Quantity"] || row["quantity"], 10);
+          const description = row["Description"] || row["description"] || "";
+
+          if (!name || !categoryName || isNaN(quantity)) {
+            throw new Error(
+              `Row ${index + 2} is missing required data fields (Name, Category, or Quantity).`,
+            );
+          }
+
+          // Cross-reference parsed category string name with your system's Category IDs
+          const matchedCategory = categories.find(
+            (cat) =>
+              cat.name.toLowerCase() === categoryName.toString().toLowerCase(),
+          );
+
+          return {
+            name,
+            category: matchedCategory ? matchedCategory.id : null, // Falls back to null if no matching category system-side
+            quantity,
+            description,
+          };
+        });
+
+        // Loop through and send the payloads to your API endpoint
+        // (Alternatively: replace this loop if your backend supports a bulk insert route e.g., bulkCreateProducts(formattedProducts))
+        // For demonstration, we assume your endpoint logic can consume items individually or via an import handler:
+
+        /* await Promise.all(formattedProducts.map(product => addProduct(product)));
+         */
+
+        setSuccess(
+          `Successfully processed ${formattedProducts.length} products from Excel!`,
+        );
+        await loadData(); // Refresh list grid view
+      } catch (err) {
+        setError(
+          err.message ||
+            "Failed to process the Excel file. Verify columns layout.",
+        );
+        console.error(err);
+      } finally {
+        setUploading(false);
+        if (fileInputRef.current) fileInputRef.current.value = ""; // Reset input DOM state
+      }
+    };
+
+    reader.onerror = () => {
+      setError("Error reading file stream.");
+      setUploading(false);
+    };
+
+    reader.readAsBinaryString(file);
+  };
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
@@ -63,7 +157,7 @@ const ViewProduct = () => {
     setEditFormData({
       id: product.id,
       name: product.name,
-      category: product.category, // Assuming backend returns the category ID
+      category: product.category,
       quantity: product.quantity,
       description: product.description,
     });
@@ -78,7 +172,6 @@ const ViewProduct = () => {
     }));
   };
 
-  // Submit the Update Form
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -92,8 +185,6 @@ const ViewProduct = () => {
     try {
       const updatedProduct = await updateProduct(editFormData.id, editFormData);
       setSuccess("Product updated successfully!");
-
-      // Update local state grid
       setProducts(
         products.map((p) => (p.id === editFormData.id ? updatedProduct : p)),
       );
@@ -119,7 +210,40 @@ const ViewProduct = () => {
 
   return (
     <Container className="mt-4">
-      <h2 className="mb-4">Product Management Grid</h2>
+      {/* Top Header Grid with built-in File Input control component */}
+      <Row className="align-items-center mb-4">
+        <Col md={6}>
+          <h2>Product Management Grid</h2>
+        </Col>
+        <Col md={6} className="text-md-end">
+          <Form.Group
+            controlId="formFile"
+            className="d-inline-block text-start me-2"
+          >
+            <Form.Control
+              type="file"
+              accept=".xlsx, .xls, .csv"
+              onChange={handleExcelImport}
+              ref={fileInputRef}
+              disabled={uploading}
+              style={{ display: "none" }}
+              id="excel-upload-input"
+            />
+            <label htmlFor="excel-upload-input" className="mb-0">
+              <Button as="span" variant="success" disabled={uploading}>
+                {uploading ? (
+                  <>
+                    <Spinner animation="border" size="sm" className="me-2" />
+                    Importing...
+                  </>
+                ) : (
+                  "Import Excel (.xlsx)"
+                )}
+              </Button>
+            </label>
+          </Form.Group>
+        </Col>
+      </Row>
 
       {error && (
         <Alert variant="danger" onClose={() => setError("")} dismissible>
@@ -132,7 +256,13 @@ const ViewProduct = () => {
         </Alert>
       )}
 
-      <Table striped bordered hover responsive className="animate___animated animate__fadeIn">
+      <Table
+        striped
+        bordered
+        hover
+        responsive
+        className="animate__animated animate__fadeIn"
+      >
         <thead>
           <tr>
             <th>ID</th>
@@ -188,7 +318,6 @@ const ViewProduct = () => {
         </Modal.Header>
         <Form onSubmit={handleUpdateSubmit}>
           <Modal.Body>
-            {/* Product Name */}
             <Form.Group className="mb-3">
               <Form.Label>Product Name</Form.Label>
               <Form.Control
@@ -200,7 +329,6 @@ const ViewProduct = () => {
               />
             </Form.Group>
 
-            {/* Category Dropdown */}
             <Form.Group className="mb-3">
               <Form.Label>Category</Form.Label>
               <Form.Select
@@ -218,7 +346,6 @@ const ViewProduct = () => {
               </Form.Select>
             </Form.Group>
 
-            {/* Quantity */}
             <Form.Group className="mb-3">
               <Form.Label>Quantity (1-1000)</Form.Label>
               <Form.Control
@@ -232,7 +359,6 @@ const ViewProduct = () => {
               />
             </Form.Group>
 
-            {/* Description */}
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
               <Form.Control
