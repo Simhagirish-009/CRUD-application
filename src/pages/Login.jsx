@@ -25,11 +25,11 @@ const Login = () => {
       localStorage.clear(); // Clear any previous data
       localStorage.setItem("access_token", response.data.access);
       localStorage.setItem("refresh_token", response.data.refresh);
-      toast.success(response.data.message || "Login successful! Please verify OTP."); // Show success toast
+      toast.success(response.data.message || "Login successful!."); // Show success toast
       // setLoading(false);
 
       setTimeout(() => {
-        navigate("/Addproduct"); 
+        navigate("/viewproducts"); 
       }, 2000); 
 
     } catch (err) {
@@ -37,7 +37,6 @@ const Login = () => {
       
       alert(err.response?.data?.message || "An error occurred during login. Please try again.");
     }
-    console.log("Logging in with:", { email, password });
   };
 
   return (
