@@ -18,7 +18,7 @@ const NavBar = () => {
       {/* Sidebar Branding Header */}
       <div className="sidebar-brand">
         {/* Full Title on Desktop, Mini Icon or first letters on Mobile */}
-        <span className="d-none d-md-block">Inventory Admin</span>
+        <span className="d-none d-md-block">Product Inventory</span>
         <span className="d-block d-md-none text-info fw-bold">IA</span>
       </div>
 
