@@ -28,10 +28,7 @@ SECRET_KEY = 'django-insecure-)8*h)7)hq38yuq#7sjj95u^g^zbh-)f+44d3pu9bolc#+=l5rp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'https://crudaplly.netlify.app/',
-    'http://localhost:3000',
-]
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'myapp.CustomUser'
 
@@ -162,5 +159,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com' 
 EMAIL_PORT = 587  
 EMAIL_USE_TLS = True  
-EMAIL_HOST_USER = 'simhagirishbotta@gmail.com'
-EMAIL_HOST_PASSWORD = 'tczc tlzf ezrm tgup'
+import os
+
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
