@@ -12,6 +12,7 @@ A full-stack Product Inventory Management System developed using React.js, Djang
 * View product list
 * Update product details
 * Delete products
+* Export as Excel Sheets
 * Responsive user interface
 * REST API integration
 * PostgreSQL database support
@@ -86,8 +87,11 @@ npm start
 | DELETE | /api/products/{id}/ | Delete product   |
 
 ## Screenshots
-
-Add screenshots here.
+<img width="1918" height="853" alt="Screenshot 2026-06-20 184258" src="https://github.com/user-attachments/assets/2020d807-3244-4ce3-937d-649dcd04a4b1" />
+<img width="1918" height="912" alt="Screenshot 2026-06-20 182311" src="https://github.com/user-attachments/assets/eff8815d-bb61-471a-9ff5-3de55d33f919" />
+<img width="1918" height="913" alt="Screenshot 2026-06-20 182255" src="https://github.com/user-attachments/assets/15c14fa0-cab6-4eec-98ba-d205299ea660" />
+<img width="1918" height="842" alt="image" src="https://github.com/user-attachments/assets/ce00ee6b-e728-4ca6-9e64-34dddc1b9124" />
+<img width="1918" height="853" alt="Screenshot 2026-06-20 184313" src="https://github.com/user-attachments/assets/9173598a-8f59-4963-833e-1be69de73714" />
 
 ## Live Demo
 
@@ -101,6 +105,7 @@ Backend API: [[Backend URL](https://crud-application-rxyd.onrender.com)]
 * Export to Excel/PDF
 * Dashboard analytics
 * Search and filtering
+* Email Authentication
 
 ## Author
 
